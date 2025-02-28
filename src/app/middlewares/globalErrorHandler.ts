@@ -3,8 +3,8 @@ import config from "../config";
 
 
 const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
-  let statusCode = 500;
-  let message = 'Something went wrong!';
+  let statusCode = err.code || 500;
+  let message = err.message || 'Something went wrong!';
 
   res.status(statusCode).json({
     success: false,

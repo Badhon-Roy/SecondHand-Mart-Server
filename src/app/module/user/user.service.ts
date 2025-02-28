@@ -1,9 +1,10 @@
 import QueryBuilder from "../../builder/QueryBuilder";
-import { IUSer } from "./user.interface";
+import { UserSearchableFields } from "./user.constant";
+import { IUser } from "./user.interface";
 import User from "./user.model";
 
 //* create user into database
-const createUserIntoDB = async (user: IUSer) => {
+const createUserIntoDB = async (user: IUser) => {
     const result = await User.create(user)
     return result;
 }
@@ -13,7 +14,7 @@ const getAllUserFromDB = async (
     query: Record<string, unknown>
 ) => {
     const userQuery = new QueryBuilder(User.find(), query)
-        .search(['name', 'email'])
+        .search(UserSearchableFields)
         .filter()
         .sort()
         .paginate()

@@ -1,11 +1,11 @@
 import { model, Schema } from "mongoose";
-import { IUSer } from "./user.interface";
 
 import bcrypt from 'bcrypt'
 import config from "../../config";
 import { NextFunction } from "express";
+import { IUser } from "./user.interface";
 
-const userSchema = new Schema<IUSer>({
+const userSchema = new Schema<IUser>({
     name: { type: String, required: true },
     email: { type: String, required: true },
     role: {
@@ -20,34 +20,21 @@ const userSchema = new Schema<IUSer>({
 }
 )
 
-// Hash password before saving
-userSchema.pre('save', async function (next) {
-    const user = this; // Reference to the user document
-    if (user.isModified('password')) {
-      user.password = await bcrypt.hash(
-        user.password,
-        Number(config.bcrypt_salt_rounds),
-      );
-    }
-    next();
-  });
-  
-  // Exclude password after saving
-  userSchema.post('save', function (doc, next) {
-    doc.password = ''; // Clear password in the returned document
-    next();
-  });
-  
-  userSchema.statics.isUserExistsByCustomEmail = async function (email: string) {
-    return await User.findOne({ email }).select('+password');
-  };
-  
-  userSchema.statics.isPasswordMatched = async function (
-    plainTextPassword,
-    hashedPassword,
-  ) {
-    return await bcrypt.compare(plainTextPassword, hashedPassword);
-  };
+userSchema.pre("save", async function (next) {
+    const user = this as any;
 
-const User = model<IUSer>("User", userSchema)
+    if (!user.password) {
+        return next();
+    }
+    user.password = await bcrypt.hash(user.password, Number(config.bcrypt_salt_rounds));
+    next();
+});
+
+
+userSchema.post('save', function (doc, next) {
+    doc.password = ''
+    next()
+})
+
+const User = model<IUser>("User", userSchema)
 export default User;
