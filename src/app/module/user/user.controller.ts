@@ -1,16 +1,25 @@
 import { UserServices } from "./user.service";
 import { catchAsync } from "../../utils/catchAsync";
+import User from "./user.model";
+import AppError from "../../errors/appError";
 
 
 // create user
 const createUser = catchAsync(async (req, res) => {
     const user = req.body;
-    const result = await UserServices.createUserIntoDB(user)
-    res.status(200).json({
-        success: true,
-        message: "User created successfully",
-        data: result
-    })
+    const exitsUser = await User.findOne({ email: user?.email })
+    if (exitsUser) {
+        throw new AppError(404, "User already Exits!")
+    } else {
+        const result = await UserServices.createUserIntoDB(user)
+        res.status(200).json({
+            success: true,
+            message: "User created successfully",
+            data: result
+        })
+    }
+
+
 })
 
 // get all user
@@ -36,11 +45,35 @@ const getSingleUser = catchAsync(async (req, res) => {
         success: true,
         data: result,
     })
+})
 
+// * update single User
+const updateSingleUser = catchAsync(async(req, res)=>{
+    const {userId} = req.params;
+    const userData = req.body;
+    const result = await UserServices.updateSingleUserFromDB(userId, userData)
+    res.status(200).json({
+        message: 'User update successfully',
+        success: true,
+        data: result,
+    })
+})
+
+// * delete User
+const deleteUser = catchAsync(async(req,res)=>{
+    const {userId} = req.params;
+    const result = await UserServices.deleteUserFromDB(userId)
+    res.status(200).json({
+        message: 'User delete successfully',
+        success: true,
+        data: {},
+    })
 })
 
 export const UserControllers = {
     createUser,
     getAllUser,
-    getSingleUser
+    getSingleUser,
+    updateSingleUser,
+    deleteUser
 }
