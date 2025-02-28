@@ -28,14 +28,30 @@ const getAllListingProductFromDB = async (
 }
 
 //* get single listing product
-const getSingleListingProductFromDB = async(productId : string)=>{
+const getSingleListingProductFromDB = async (productId: string) => {
     const result = await Listing.findById(productId)
+    return result;
+}
+
+//* update listing product details 
+const updateSingleListingProductFromDB = async (productId: string, listingProductData: IListing) => {
+    const result = await Listing.findByIdAndUpdate(productId, listingProductData, {
+        new: true
+    })
+    return result;
+}
+
+// * delete listing product form database
+const deleteListingProductFromDB = async (productId: string) => {
+    const result = await Listing.findByIdAndDelete(productId)
     return result;
 }
 
 export const ListingServices = {
     createListingProductIntoDB,
     getAllListingProductFromDB,
-    getSingleListingProductFromDB
+    getSingleListingProductFromDB,
+    updateSingleListingProductFromDB,
+    deleteListingProductFromDB
 
 } 

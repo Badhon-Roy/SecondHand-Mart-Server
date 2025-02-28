@@ -10,5 +10,9 @@ router.post('/', validateRequest(listingValidationSchema), ListingControllers.cr
 router.get('/', ListingControllers.getAllListingProduct)
 router.get('/:listingId',
     ListingControllers.getSingleListingProduct)
+router.put('/:listingId',
+    ListingControllers.updateSingleListingProduct)
+router.delete('/:listingId',
+    ListingControllers.deleteListingProduct)
 
 export const listingRouter = router;

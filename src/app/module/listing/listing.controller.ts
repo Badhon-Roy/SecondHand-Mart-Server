@@ -38,11 +38,35 @@ const getSingleListingProduct = catchAsync(async (req, res) => {
         success: true,
         data: result,
     })
+})
 
+// * update single listing product
+const updateSingleListingProduct = catchAsync(async(req, res)=>{
+    const {listingId} = req.params;
+    const listingProductData = req.body;
+    const result = await ListingServices.updateSingleListingProductFromDB(listingId, listingProductData)
+    res.status(200).json({
+        message: 'Listing product update successfully',
+        success: true,
+        data: result,
+    })
+})
+
+// * delete listing product
+const deleteListingProduct = catchAsync(async(req,res)=>{
+    const {listingId} = req.params;
+    const result = await ListingServices.deleteListingProductFromDB(listingId)
+    res.status(200).json({
+        message: 'Listing product delete successfully',
+        success: true,
+        data: {},
+    })
 })
 
 export const ListingControllers = {
     createListingProduct,
     getAllListingProduct,
-    getSingleListingProduct
+    getSingleListingProduct,
+    updateSingleListingProduct,
+    deleteListingProduct
 }
