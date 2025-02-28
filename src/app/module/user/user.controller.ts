@@ -1,23 +1,45 @@
-import { Request, Response } from "express";
 import { UserServices } from "./user.service";
-import User from "./user.model";
+import { catchAsync } from "../../utils/catchAsync";
 
 
-const createUser = async(req: Request, res: Response) => {
-    try {
-        const user = req.body;
-        const result = await UserServices.createUserIntoDB(user)
-        console.log(result);
-        res.status(200).json({
-            success: true,
-            message : "User created successfully",
-            body : result
-        })
-    } catch (error) {
-        console.log(error);
-    }
-}
+// create user
+const createUser = catchAsync(async (req, res) => {
+    const user = req.body;
+    const result = await UserServices.createUserIntoDB(user)
+    res.status(200).json({
+        success: true,
+        message: "User created successfully",
+        data: result
+    })
+})
+
+// get all user
+const getAllUser = catchAsync(async (req, res) => {
+    const result = await UserServices.getAllUserFromDB(
+        req.query
+    )
+    res.status(200).json({
+        message: 'Users are retrieved successfully',
+        success: true,
+        meta: result.meta,
+        data: result.result,
+    })
+})
+
+//* get single user 
+const getSingleUser = catchAsync(async (req, res) => {
+    const { userId } = req.params;
+    const result = await UserServices.getSingleUserFromDB(userId)
+    res.status(200).json({
+        message: 'User retrieved successfully',
+        success: true,
+        data: result,
+    })
+
+})
 
 export const UserControllers = {
-    createUser
+    createUser,
+    getAllUser,
+    getSingleUser
 }
