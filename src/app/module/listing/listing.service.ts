@@ -13,7 +13,9 @@ const createListingProductIntoDB = async (product: IListing) => {
 const getAllListingProductFromDB = async (
     query: Record<string, unknown>
 ) => {
-    const listingQuery = new QueryBuilder(Listing.find(), query)
+    const listingQuery = new QueryBuilder(
+        Listing.find().populate('userID') ,
+        query)
         .search(ListingSearchableFields)
         .filter()
         .sort()

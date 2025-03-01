@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { model, Schema } from "mongoose";
 
 import bcrypt from 'bcrypt'
@@ -12,7 +13,7 @@ const userSchema = new Schema<IUser, UserModel>({
         enum: ['admin', "user"],
         default: "user"
     },
-    password: { type: String, required: true },
+    password: { type: String, required: true},
     avatar: String
 }, {
     timestamps: true

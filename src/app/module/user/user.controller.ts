@@ -12,7 +12,7 @@ const createUser = catchAsync(async (req, res) => {
         throw new AppError(404, "User already Exits!")
     } else {
         const result = await UserServices.createUserIntoDB(user)
-        res.status(200).json({
+       res.status(200).json({
             success: true,
             message: "User created successfully",
             data: result
@@ -63,6 +63,7 @@ const updateSingleUser = catchAsync(async(req, res)=>{
 const deleteUser = catchAsync(async(req,res)=>{
     const {userId} = req.params;
     const result = await UserServices.deleteUserFromDB(userId)
+    console.log(result);
     res.status(200).json({
         message: 'User delete successfully',
         success: true,

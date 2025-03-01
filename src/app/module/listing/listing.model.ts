@@ -1,4 +1,4 @@
-import mongoose, { model, Schema } from "mongoose";
+import{ model, Schema } from "mongoose";
 import { IListing } from "./listing.interface";
 
 
@@ -29,7 +29,7 @@ const listingSchema = new Schema<IListing>(
             required: true,
         },
         userID: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: 'User',
             required: true,
         },

@@ -1,10 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
+
 import { ErrorRequestHandler } from "express";
 import config from "../config";
 
 
 const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
-  let statusCode = err.code || 500;
-  let message = err.message || 'Something went wrong!';
+  const statusCode = err.statusCode || 500;
+  const message = err.message || 'Something went wrong!';
 
   res.status(statusCode).json({
     success: false,

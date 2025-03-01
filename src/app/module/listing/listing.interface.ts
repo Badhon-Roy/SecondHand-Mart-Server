@@ -1,4 +1,4 @@
-import { ObjectId } from "mongoose";
+import { Types } from "mongoose";
 
 export interface IListing {
     title: string;
@@ -6,6 +6,6 @@ export interface IListing {
     price: number;
     condition: 'new' | 'used' | 'refurbished';
     images: string[];
-    userID: ObjectId;
+    userID: Types.ObjectId;
     status: 'available' | 'sold';
 }
