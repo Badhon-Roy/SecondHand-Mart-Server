@@ -39,6 +39,11 @@ const listingSchema = new Schema<IListing>(
             required: true,
             default: 'available',
         },
+        category: {
+            type: Schema.Types.ObjectId,
+            ref: 'Category',
+            required: true,
+        },
     },
     { timestamps: true }
 );

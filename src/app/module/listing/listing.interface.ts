@@ -8,4 +8,5 @@ export interface IListing {
     images: string[];
     userID: Types.ObjectId;
     status: 'available' | 'sold';
+    category : Types.ObjectId;
 }

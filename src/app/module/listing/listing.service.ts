@@ -14,7 +14,7 @@ const getAllListingProductFromDB = async (
     query: Record<string, unknown>
 ) => {
     const listingQuery = new QueryBuilder(
-        Listing.find().populate('userID') ,
+        Listing.find().populate('userID', 'category') ,
         query)
         .search(ListingSearchableFields)
         .filter()

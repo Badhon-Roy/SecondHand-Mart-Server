@@ -9,6 +9,7 @@ const loginUser = async (payload: ILoginUser) => {
 
   /// checking if the user is exist
   const user = await User.isUserExistsByEmail(payload?.email);
+  console.log(user);
   if (!user) {
     throw new AppError(404, 'This user is not found !');
   }
