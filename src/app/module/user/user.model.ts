@@ -14,6 +14,7 @@ const userSchema = new Schema<IUser, UserModel>({
         default: "user"
     },
     password: { type: String, required: true},
+    phoneNumber: { type: String, required: true},
     avatar: String
 }, {
     timestamps: true

@@ -14,7 +14,7 @@ const getAllListingProductFromDB = async (
     query: Record<string, unknown>
 ) => {
     const listingQuery = new QueryBuilder(
-        Listing.find().populate('userID', 'category') ,
+        Listing.find().populate('userID').populate('category') ,
         query)
         .search(ListingSearchableFields)
         .filter()
@@ -32,8 +32,14 @@ const getAllListingProductFromDB = async (
 //* get single listing product
 const getSingleListingProductFromDB = async (productId: string) => {
     const result = await Listing.findById(productId)
+        .populate('userID')
+        .populate('category');
+
+    if (!result) {
+        throw new Error("Product not found");
+    }
     return result;
-}
+};
 
 //* update listing product details 
 const updateSingleListingProductFromDB = async (productId: string, listingProductData: IListing) => {

@@ -3,6 +3,7 @@ import { userRouter } from "../module/user/user.route";
 import { listingRouter } from "../module/listing/listing.route";
 import { authRouter } from "../module/auth/auth.route";
 import { categoryRouter } from "../module/category/category.route";
+import { favoriteRouter } from "../module/favorite/favorite.route";
 
 const router = Router();
 
@@ -22,6 +23,10 @@ const moduleRoutes = [
     {
         path : '/categories',
         route: categoryRouter
+    },
+    {
+        path : '/favorites',
+        route: favoriteRouter
     }
 ]
 

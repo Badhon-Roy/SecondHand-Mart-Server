@@ -8,6 +8,7 @@ export interface IUser {
     password: string;
     role: 'admin' | 'user'
     avatar?: string;
+    phoneNumber : string;
 }
 
 export interface UserModel extends Model<IUser> {

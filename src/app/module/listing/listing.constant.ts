@@ -1,5 +1,6 @@
 export const ListingSearchableFields = [
     'category',
     'price',
-    'condition'
+    'condition',
+    'title'
 ];
