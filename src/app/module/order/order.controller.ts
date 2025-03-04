@@ -15,7 +15,7 @@ const createOrder = async (req: Request, res: Response, next: NextFunction) => {
         const order = req.body;
         const user = await User.findById(order?.buyerID);
         const product = await Listing.findById(order?.itemID);
-        
+
         const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
         // Create Stripe Checkout session
@@ -76,15 +76,6 @@ const createOrder = async (req: Request, res: Response, next: NextFunction) => {
 
 
 
-
-
-
-
-
-
-
-
-
 // get all Order
 const getAllOrder = catchAsync(async (req, res) => {
     const result = await OrderServices.getAllOrderFromDB(
@@ -101,7 +92,6 @@ const getAllOrder = catchAsync(async (req, res) => {
 //* get single Order 
 const getSingleOrder = catchAsync(async (req, res) => {
     const { id } = req.params;
-    console.log('id -', id);
     const result = await OrderServices.getSingleOrderFromDB(id)
     res.status(200).json({
         message: 'Order retrieved successfully',
@@ -109,6 +99,48 @@ const getSingleOrder = catchAsync(async (req, res) => {
         data: result,
     })
 })
+
+
+// Controller to get purchase history
+const getPurchaseHistory = catchAsync(async (req, res) => {
+    const { userId } = req.params;
+    const purchaseHistory = await OrderServices.fetchPurchaseHistory(userId);
+    res.status(200).json({
+        message: 'Order purchase history retrieved successfully',
+        success: true,
+        data: purchaseHistory,
+    })
+});
+const getSinglePurchaseHistory = catchAsync(async (req, res) => {
+    const {id, userId } = req.params;
+    const purchaseHistory = await OrderServices.fetchSinglePurchaseHistory(id ,userId);
+    res.status(200).json({
+        message: 'Order purchase history retrieved successfully',
+        success: true,
+        data: purchaseHistory,
+    })
+});
+
+// Controller to get sales history
+const getSalesHistory = catchAsync(async (req, res) => {
+    const { userId } = req.params;
+    const salesHistory = await OrderServices.fetchSalesHistory(userId);
+    res.status(200).json({
+        message: 'Order sales history retrieved successfully',
+        success: true,
+        data: salesHistory,
+    })
+});
+
+const getSingleSalesHistory = catchAsync(async (req, res) => {
+    const {id, userId } = req.params;
+    const salesHistory = await OrderServices.fetchSingleSalesHistory(id ,userId);
+    res.status(200).json({
+        message: 'Order sales history retrieved successfully',
+        success: true,
+        data: salesHistory,
+    })
+});
 
 // * update single Order
 const updateSingleOrder = catchAsync(async (req, res) => {
@@ -121,6 +153,27 @@ const updateSingleOrder = catchAsync(async (req, res) => {
         data: result,
     })
 })
+
+
+// update status
+const updateOrderStatus = catchAsync(async (req, res) => {
+    const { status, sellerID, orderID } = req.body;
+    if (!status || !sellerID || !orderID) {
+      res.status(400).json({
+        message: 'Status, sellerID, and orderId are required.',
+        success: false,
+      });
+      return
+    }
+  
+    // Call the service to update the order status
+    const result = await OrderServices.updateOrderStatusFromDB(sellerID, orderID, status);
+    res.status(200).json({
+      message: 'Order status updated successfully!',
+      success: true,
+      data: result
+    })
+  });
 
 // * delete Order
 const deleteOrder = catchAsync(async (req, res) => {
@@ -137,6 +190,11 @@ export const OrderControllers = {
     createOrder,
     getAllOrder,
     getSingleOrder,
+    getPurchaseHistory,
+    getSalesHistory,
+    getSingleSalesHistory,
     updateSingleOrder,
+    updateOrderStatus,
+    getSinglePurchaseHistory,
     deleteOrder
 }

@@ -3,5 +3,6 @@ export const orderSearchableFields = [
     'city',
     'buyerID',
     'sellerID',
-    "itemID"
+    "itemID",
+    "email"
 ];
