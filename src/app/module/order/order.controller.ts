@@ -73,8 +73,6 @@ const createOrder = async (req: Request, res: Response, next: NextFunction) => {
         })
 
         const result = await OrderServices.createOrderIntoDB(newOrder);
-
-
         res.status(200).json({
             message: 'Order retrieved successfully',
             success: true,
