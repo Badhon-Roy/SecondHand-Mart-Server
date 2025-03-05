@@ -32,9 +32,7 @@ const getAllListingProduct = catchAsync(async (req, res) => {
 //* get single listing product 
 const getSingleListingProduct = catchAsync(async (req, res) => {
     const { listingId } = req.params;
-    console.log(listingId);
     const result = await ListingServices.getSingleListingProductFromDB(listingId)
-    console.log(result);
     res.status(200).json({
         message: 'Listing product retrieved successfully',
         success: true,

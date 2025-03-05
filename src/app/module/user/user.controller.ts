@@ -38,7 +38,6 @@ const getAllUser = catchAsync(async (req, res) => {
 //* get single user 
 const getSingleUser = catchAsync(async (req, res) => {
     const { userId } = req.params;
-    console.log(userId);
     const result = await UserServices.getSingleUserFromDB(userId)
     res.status(200).json({
         message: 'User retrieved successfully',

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import QueryBuilder from "../../builder/QueryBuilder";
 import { ListingSearchableFields } from "./listing.constant";
 import { IListing } from "./listing.interface";
@@ -10,24 +11,40 @@ const createListingProductIntoDB = async (product: IListing) => {
 }
 
 //* get all listing product
-const getAllListingProductFromDB = async (
-    query: Record<string, unknown>
-) => {
+const getAllListingProductFromDB = async (query: Record<string, unknown>) => {
+    const { minPrice, maxPrice, categories, conditions, statuses, ...pQuery } = query;
+
+    const filter: Record<string, any> = {};
+    const parseArrayQuery = (param: unknown): string[] => {
+        if (!param) return [];
+        if (typeof param === 'string') return param.split(',');
+        if (Array.isArray(param)) return param;
+        return [param.toString()];
+    };
+    const categoryArray = parseArrayQuery(categories);
+    if (categoryArray.length) filter.category = { $in: categoryArray };
+    const conditionsArray = parseArrayQuery(conditions);
+    if (conditionsArray.length) filter.condition = { $in: conditionsArray };
+    const statusesArray = parseArrayQuery(statuses);
+    if (statusesArray.length) filter.status = { $in: statusesArray };
     const listingQuery = new QueryBuilder(
-        Listing.find().populate('userID').populate('category') ,
-        query)
+        Listing.find(filter).populate('userID').populate('category'),
+        pQuery
+    )
         .search(ListingSearchableFields)
         .filter()
         .sort()
         .paginate()
-        .fields();
-    const result = await listingQuery.modelQuery;
+        .fields()
+        .priceRange(Number(minPrice) || 0, Number(maxPrice) || Infinity);
+
+    const result = await listingQuery.modelQuery.lean();
     const meta = await listingQuery.countTotal();
-    return {
-        result,
-        meta
-    };
-}
+
+    return { result, meta };
+};
+
+
 
 //* get single listing product
 const getSingleListingProductFromDB = async (productId: string) => {

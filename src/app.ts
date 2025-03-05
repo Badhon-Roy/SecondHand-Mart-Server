@@ -3,6 +3,8 @@ import cors from "cors"
 import router from './app/routes';
 import globalErrorHandler from './app/middlewares/globalErrorHandler';
 import cookieParser from 'cookie-parser';
+import dotenv from "dotenv";
+dotenv.config();
 
 const app: Application = express();
 

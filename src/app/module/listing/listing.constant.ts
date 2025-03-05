@@ -1,7 +1,9 @@
 export const ListingSearchableFields = [
     'category',
-    'price',
+    'minPrice',
+    'maxPrice',
     'condition',
     'title',
-    "userID"
+    "userID",
+    "status"
 ];

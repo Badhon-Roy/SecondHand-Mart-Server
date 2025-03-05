@@ -7,7 +7,7 @@ import User from "../user/user.model";
 import Listing from "../listing/listing.model";
 import OrderModel from "./order.model";
 import { NextFunction, Request, Response } from "express";
-
+import sendMail from "./order.email";
 
 
 const createOrder = async (req: Request, res: Response, next: NextFunction) => {
@@ -17,9 +17,7 @@ const createOrder = async (req: Request, res: Response, next: NextFunction) => {
         const product = await Listing.findById(order?.itemID);
 
         const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
-
-        // Create Stripe Checkout session
-        const session = await stripe.checkout.sessions.create({
+        const sessionData: Stripe.Checkout.SessionCreateParams = {
             payment_method_types: ['card'],
             mode: 'payment',
             success_url: `${process.env.CLIENT_SITE_URL}/checkout-success`,
@@ -32,15 +30,17 @@ const createOrder = async (req: Request, res: Response, next: NextFunction) => {
                         currency: 'bdt',
                         unit_amount: Math.round(parseFloat(order?.price) * 100),
                         product_data: {
-                            name: product?.title,
-                            description: product?.description,
-                            images: [product?.images[0]],
+                            name: product?.title ?? "Unknown Product",
+                            description: product?.description ?? "No description available",
+                            images: product?.images?.[0] ? [product.images[0]] : [],
                         },
                     },
                     quantity: 1,
                 },
             ],
-        });
+        };
+        
+        const session = await stripe.checkout.sessions.create(sessionData);
 
         // Create new order in your database
         const newOrder = new OrderModel({
@@ -60,6 +60,18 @@ const createOrder = async (req: Request, res: Response, next: NextFunction) => {
 
         // Save order in database
         await newOrder.save();
+        //* send email to the seller about the order
+        const seller = await User.findById(order?.sellerID);
+
+        sendMail({
+            image: product?.images?.[0] ? [product.images[0]] : [],
+            productName: product?.title ?? "Unknown Product",
+            productPrice: order?.price,
+            buyerName: order?.name,
+            sellerName: seller?.name ?? "Unknown Seller",
+            sellerEmail: seller?.email ?? "seller@example.com"
+        })
+
         const result = await OrderServices.createOrderIntoDB(newOrder);
 
 
