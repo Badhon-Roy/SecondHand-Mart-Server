@@ -1,6 +1,6 @@
-import { Types } from "mongoose";
+import { Types } from 'mongoose';
 
 export interface IFavorite {
-    product :  Types.ObjectId
-    email : string
+  product: Types.ObjectId;
+  email: string;
 }

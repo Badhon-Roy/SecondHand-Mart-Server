@@ -1,8 +1,8 @@
 export const orderSearchableFields = [
-    'name',
-    'city',
-    'buyerID',
-    'sellerID',
-    "itemID",
-    "email"
+  'name',
+  'city',
+  'buyerID',
+  'sellerID',
+  'itemID',
+  'email',
 ];

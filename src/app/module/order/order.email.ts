@@ -2,32 +2,31 @@ import nodemailer from 'nodemailer';
 
 // Define TypeScript types for the sendMail function
 interface MailOptions {
-    image: string[];
-    productName: string;
-    productPrice: string;
-    buyerName: string;
-    sellerName: string;
-    sellerEmail: string;
+  image: string[];
+  productName: string;
+  productPrice: string;
+  buyerName: string;
+  sellerName: string;
+  sellerEmail: string;
 }
 
 const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-        user: process.env.MY_EMAIL,
-        pass: process.env.EMAIL_APP_PASSWORD,
-    },
+  service: 'gmail',
+  auth: {
+    user: process.env.MY_EMAIL,
+    pass: process.env.EMAIL_APP_PASSWORD,
+  },
 });
 
 async function sendMail({
-    image,
-    productName,
-    productPrice,
-    buyerName,
-    sellerName,
-    sellerEmail
+  image,
+  productName,
+  productPrice,
+  buyerName,
+  sellerName,
+  sellerEmail,
 }: MailOptions): Promise<void> {
-
-    const emailHTML = `
+  const emailHTML = `
     <!DOCTYPE html>
     <html>
     <head>
@@ -137,14 +136,14 @@ async function sendMail({
     </html>
     `;
 
-    const info = await transporter.sendMail({
-        from: '"SecondHand-Mart" <secondhandmart@gmail.com>',
-        to: sellerEmail,
-        subject: "Order Confirmation ✅",
-        html: emailHTML,
-    });
+  const info = await transporter.sendMail({
+    from: '"SecondHand-Mart" <secondhandmart@gmail.com>',
+    to: sellerEmail,
+    subject: 'Order Confirmation ✅',
+    html: emailHTML,
+  });
 
-    console.log("Message sent: %s", info.messageId);
+  console.log('Message sent: %s', info.messageId);
 }
 
 export default sendMail;

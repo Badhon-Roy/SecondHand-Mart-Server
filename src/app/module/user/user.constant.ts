@@ -1,11 +1,6 @@
-export const UserSearchableFields = [
-    'email',
-    'name',
-    'role'
-];
+export const UserSearchableFields = ['email', 'name', 'role'];
 
 export const USER_ROLE = {
-    admin: 'admin',
-    user: 'user'
-} as const
-
+  admin: 'admin',
+  user: 'user',
+} as const;

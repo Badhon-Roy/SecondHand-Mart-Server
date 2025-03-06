@@ -3,23 +3,23 @@ import jwt, { JwtPayload, SignOptions } from 'jsonwebtoken';
 
 // Define the payload interface
 interface Payload {
-    email: string;
-    role: string;
+  email: string;
+  role: string;
 }
 // Function to create a token
 export const createToken = (
-    jwtPayload: Payload,
-    secret: string,
-    expiresIn: any
+  jwtPayload: Payload,
+  secret: string,
+  expiresIn: any,
 ): string => {
-    const options: SignOptions = {
-        expiresIn, // 'expiresIn' should be either a string or number.
-    };
+  const options: SignOptions = {
+    expiresIn, // 'expiresIn' should be either a string or number.
+  };
 
-    return jwt.sign(jwtPayload, secret, options);
+  return jwt.sign(jwtPayload, secret, options);
 };
 
 // Function to verify the token
 export const verifyToken = (token: string, secret: string): JwtPayload => {
-    return jwt.verify(token, secret) as JwtPayload;
+  return jwt.verify(token, secret) as JwtPayload;
 };

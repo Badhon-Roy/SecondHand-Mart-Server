@@ -1,72 +1,71 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
-import { catchAsync } from "../../utils/catchAsync";
-import { ListingServices } from "./listing.service";
-
-
+import { catchAsync } from '../../utils/catchAsync';
+import { ListingServices } from './listing.service';
 
 // create listing product
 const createListingProduct = catchAsync(async (req, res) => {
-    const product = req.body;
-    const result = await ListingServices.createListingProductIntoDB(product)
-    res.status(200).json({
-        success: true,
-        message: "Listing Product created successfully",
-        data: result
-    })
-})
+  const product = req.body;
+  const result = await ListingServices.createListingProductIntoDB(product);
+  res.status(200).json({
+    success: true,
+    message: 'Listing Product created successfully',
+    data: result,
+  });
+});
 
 // get all listing product
 const getAllListingProduct = catchAsync(async (req, res) => {
-    const result = await ListingServices.getAllListingProductFromDB(
-        req.query
-    )
-    res.status(200).json({
-        message: 'Listing products are retrieved successfully',
-        success: true,
-        meta: result.meta,
-        data: result.result,
-    })
-})
+  const result = await ListingServices.getAllListingProductFromDB(req.query);
+  res.status(200).json({
+    message: 'Listing products are retrieved successfully',
+    success: true,
+    meta: result.meta,
+    data: result.result,
+  });
+});
 
-//* get single listing product 
+//* get single listing product
 const getSingleListingProduct = catchAsync(async (req, res) => {
-    const { listingId } = req.params;
-    const result = await ListingServices.getSingleListingProductFromDB(listingId)
-    res.status(200).json({
-        message: 'Listing product retrieved successfully',
-        success: true,
-        data: result,
-    })
-})
+  const { listingId } = req.params;
+  const result = await ListingServices.getSingleListingProductFromDB(listingId);
+  res.status(200).json({
+    message: 'Listing product retrieved successfully',
+    success: true,
+    data: result,
+  });
+});
 
 // * update single listing product
-const updateSingleListingProduct = catchAsync(async(req, res)=>{
-    const {listingId} = req.params;
-    const listingProductData = req.body;
-    const result = await ListingServices.updateSingleListingProductFromDB(listingId, listingProductData)
-    res.status(200).json({
-        message: 'Listing product update successfully',
-        success: true,
-        data: result,
-    })
-})
+const updateSingleListingProduct = catchAsync(async (req, res) => {
+  const { listingId } = req.params;
+  const listingProductData = req.body;
+  const result = await ListingServices.updateSingleListingProductFromDB(
+    listingId,
+    listingProductData,
+  );
+  res.status(200).json({
+    message: 'Listing product update successfully',
+    success: true,
+    data: result,
+  });
+});
 
 // * delete listing product
-const deleteListingProduct = catchAsync(async(req,res)=>{
-    const {listingId} = req.params;
-    const result = await ListingServices.deleteListingProductFromDB(listingId)
-    res.status(200).json({
-        message: 'Listing product delete successfully',
-        success: true,
-        data: {},
-    })
-})
+const deleteListingProduct = catchAsync(async (req, res) => {
+  const { listingId } = req.params;
+  const result = await ListingServices.deleteListingProductFromDB(listingId);
+  res.status(200).json({
+    message: 'Listing product delete successfully',
+    success: true,
+    data: {},
+  });
+});
 
 export const ListingControllers = {
-    createListingProduct,
-    getAllListingProduct,
-    getSingleListingProduct,
-    updateSingleListingProduct,
-    deleteListingProduct
-}
+  createListingProduct,
+  getAllListingProduct,
+  getSingleListingProduct,
+  updateSingleListingProduct,
+  deleteListingProduct,
+};

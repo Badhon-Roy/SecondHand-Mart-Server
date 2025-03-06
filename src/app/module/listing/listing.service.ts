@@ -1,82 +1,87 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import QueryBuilder from "../../builder/QueryBuilder";
-import { ListingSearchableFields } from "./listing.constant";
-import { IListing } from "./listing.interface";
-import Listing from "./listing.model";
+import QueryBuilder from '../../builder/QueryBuilder';
+import { ListingSearchableFields } from './listing.constant';
+import { IListing } from './listing.interface';
+import Listing from './listing.model';
 
 //* create listing product into database
 const createListingProductIntoDB = async (product: IListing) => {
-    const result = await Listing.create(product)
-    return result;
-}
+  const result = await Listing.create(product);
+  return result;
+};
 
 //* get all listing product
 const getAllListingProductFromDB = async (query: Record<string, unknown>) => {
-    const { minPrice, maxPrice, categories, conditions, statuses, ...pQuery } = query;
+  const { minPrice, maxPrice, categories, conditions, statuses, ...pQuery } =
+    query;
 
-    const filter: Record<string, any> = {};
-    const parseArrayQuery = (param: unknown): string[] => {
-        if (!param) return [];
-        if (typeof param === 'string') return param.split(',');
-        if (Array.isArray(param)) return param;
-        return [param.toString()];
-    };
-    const categoryArray = parseArrayQuery(categories);
-    if (categoryArray.length) filter.category = { $in: categoryArray };
-    const conditionsArray = parseArrayQuery(conditions);
-    if (conditionsArray.length) filter.condition = { $in: conditionsArray };
-    const statusesArray = parseArrayQuery(statuses);
-    if (statusesArray.length) filter.status = { $in: statusesArray };
-    const listingQuery = new QueryBuilder(
-        Listing.find(filter).populate('userID').populate('category'),
-        pQuery
-    )
-        .search(ListingSearchableFields)
-        .filter()
-        .sort()
-        .paginate()
-        .fields()
-        .priceRange(Number(minPrice) || 0, Number(maxPrice) || Infinity);
+  const filter: Record<string, any> = {};
+  const parseArrayQuery = (param: unknown): string[] => {
+    if (!param) return [];
+    if (typeof param === 'string') return param.split(',');
+    if (Array.isArray(param)) return param;
+    return [param.toString()];
+  };
+  const categoryArray = parseArrayQuery(categories);
+  if (categoryArray.length) filter.category = { $in: categoryArray };
+  const conditionsArray = parseArrayQuery(conditions);
+  if (conditionsArray.length) filter.condition = { $in: conditionsArray };
+  const statusesArray = parseArrayQuery(statuses);
+  if (statusesArray.length) filter.status = { $in: statusesArray };
+  const listingQuery = new QueryBuilder(
+    Listing.find(filter).populate('userID').populate('category'),
+    pQuery,
+  )
+    .search(ListingSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields()
+    .priceRange(Number(minPrice) || 0, Number(maxPrice) || Infinity);
 
-    const result = await listingQuery.modelQuery.lean();
-    const meta = await listingQuery.countTotal();
+  const result = await listingQuery.modelQuery.lean();
+  const meta = await listingQuery.countTotal();
 
-    return { result, meta };
+  return { result, meta };
 };
-
-
 
 //* get single listing product
 const getSingleListingProductFromDB = async (productId: string) => {
-    const result = await Listing.findById(productId)
-        .populate('userID')
-        .populate('category');
+  const result = await Listing.findById(productId)
+    .populate('userID')
+    .populate('category');
 
-    if (!result) {
-        throw new Error("Product not found");
-    }
-    return result;
+  if (!result) {
+    throw new Error('Product not found');
+  }
+  return result;
 };
 
-//* update listing product details 
-const updateSingleListingProductFromDB = async (productId: string, listingProductData: IListing) => {
-    const result = await Listing.findByIdAndUpdate(productId, listingProductData, {
-        new: true
-    })
-    return result;
-}
+//* update listing product details
+const updateSingleListingProductFromDB = async (
+  productId: string,
+  listingProductData: IListing,
+) => {
+  const result = await Listing.findByIdAndUpdate(
+    productId,
+    listingProductData,
+    {
+      new: true,
+    },
+  );
+  return result;
+};
 
 // * delete listing product form database
 const deleteListingProductFromDB = async (productId: string) => {
-    const result = await Listing.findByIdAndDelete(productId)
-    return result;
-}
+  const result = await Listing.findByIdAndDelete(productId);
+  return result;
+};
 
 export const ListingServices = {
-    createListingProductIntoDB,
-    getAllListingProductFromDB,
-    getSingleListingProductFromDB,
-    updateSingleListingProductFromDB,
-    deleteListingProductFromDB
-
-} 
+  createListingProductIntoDB,
+  getAllListingProductFromDB,
+  getSingleListingProductFromDB,
+  updateSingleListingProductFromDB,
+  deleteListingProductFromDB,
+};
