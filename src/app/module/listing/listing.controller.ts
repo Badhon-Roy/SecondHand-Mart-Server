@@ -62,10 +62,23 @@ const deleteListingProduct = catchAsync(async (req, res) => {
   });
 });
 
+//* add discount
+const addDiscount = catchAsync(async (req, res) => {
+  const { listingId } = req.params;
+  const {discount} = req.body;
+  const result = await ListingServices.addDiscountPrice(listingId, discount)
+  res.status(200).json({
+    message: 'Add discount successfully',
+    success: true,
+    data: result,
+  });
+})
+
 export const ListingControllers = {
   createListingProduct,
   getAllListingProduct,
   getSingleListingProduct,
   updateSingleListingProduct,
   deleteListingProduct,
+  addDiscount
 };

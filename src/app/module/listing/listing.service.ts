@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import QueryBuilder from '../../builder/QueryBuilder';
+import AppError from '../../errors/appError';
 import { ListingSearchableFields } from './listing.constant';
 import { IListing } from './listing.interface';
 import Listing from './listing.model';
@@ -78,10 +79,50 @@ const deleteListingProductFromDB = async (productId: string) => {
   return result;
 };
 
+const addDiscountPrice = async (
+  productId: string,
+  discountValue: number,
+) => {
+  if (typeof discountValue !== 'number' || discountValue < 0) {
+    throw new AppError(404, 'Invalid discount value');
+  }
+
+  // Find the product by ID
+  const product = await Listing.findById(productId);
+  if (!product) {
+    throw new AppError(404, "Product not found");
+  }
+
+  // Calculate the discounted price
+  const originalPrice = product?.price;
+  const discountAmount = (originalPrice * discountValue) / 100;
+  let newPrice;
+  if (discountAmount > 1) {
+    newPrice = originalPrice - discountAmount;
+  } else {
+    newPrice = 0
+  }
+
+
+  const result = await Listing.findByIdAndUpdate(
+    productId,
+    {
+      discount: discountValue,
+      discountPrice: newPrice
+    },
+    {
+      new: true,
+    }
+  );
+  return result;
+};
+
+
 export const ListingServices = {
   createListingProductIntoDB,
   getAllListingProductFromDB,
   getSingleListingProductFromDB,
   updateSingleListingProductFromDB,
   deleteListingProductFromDB,
+  addDiscountPrice
 };

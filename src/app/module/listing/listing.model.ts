@@ -18,6 +18,14 @@ const listingSchema = new Schema<IListing>(
       required: true,
       min: 0,
     },
+    discountPrice: {
+      type: Number,
+      default: 0
+    },
+    discount: {
+      type: Number,
+      default: 0
+    },
     condition: {
       type: String,
       enum: ['new', 'used', 'refurbished'],

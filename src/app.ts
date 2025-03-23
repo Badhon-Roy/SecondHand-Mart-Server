@@ -11,7 +11,7 @@ const app: Application = express();
 //  Middleware to parse JSON and handle CORS
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ origin: ['https://secondhand-mart.vercel.app'], credentials: true }));
+app.use(cors({ origin: ['https://secondhand-mart.vercel.app','http://localhost:3000'], credentials: true }));
 
 //* application related api
 app.use('/api/v1', router);

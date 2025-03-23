@@ -5,6 +5,8 @@ const createListingValidationSchema = z.object({
     title: z.string().min(1, 'Title is required'),
     description: z.string().min(1, 'Description is required'),
     price: z.number().min(0, 'Price must be a non-negative number'),
+    discountPrice: z.number().default(0),
+    discount: z.number().default(0),
     condition: z.enum(['new', 'used', 'refurbished'], {
       message: 'Invalid condition value',
     }),
