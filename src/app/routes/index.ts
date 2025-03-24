@@ -6,6 +6,7 @@ import { categoryRouter } from '../module/category/category.route';
 import { favoriteRouter } from '../module/favorite/favorite.route';
 import { orderRouter } from '../module/order/order.route';
 import { messageRouter } from '../module/message/message.route';
+import { blogsRouter } from '../module/blog/blog.route';
 
 const router = Router();
 
@@ -37,6 +38,10 @@ const moduleRoutes = [
   {
     path: '/messages',
     route: messageRouter,
+  },
+  {
+    path: '/blogs',
+    route: blogsRouter,
   },
 ];
 
