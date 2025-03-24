@@ -7,7 +7,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 
 const loginUser = async (payload: ILoginUser) => {
   /// checking if the user is exist
-  const user = await User.isUserExistsByEmail(payload?.email);
+  const user = await User.findOne({ email: payload?.email })
   if (!user) {
     throw new AppError(404, 'This user is not found !');
   }
@@ -17,6 +17,7 @@ const loginUser = async (payload: ILoginUser) => {
     throw new AppError(403, 'Password do not matched');
 
   const jwtPayload = {
+    userId: user?._id,
     email: user?.email,
     role: user?.role,
   };
@@ -51,12 +52,13 @@ const refreshToken = async (token: string) => {
     throw new AppError(401, 'Unauthorized');
   }
   const { email } = decoded;
-  const isExistsUser = await User.isUserExistsByEmail(email);
+  const isExistsUser = await User.findOne({email : email});
   if (!isExistsUser) {
     throw new AppError(404, 'This user is not found!');
   }
 
   const jwtPayload = {
+    userId : isExistsUser?._id,
     email: isExistsUser?.email,
     role: isExistsUser?.role,
   };
